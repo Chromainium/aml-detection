@@ -40,6 +40,28 @@
             opacity: 0.8;
             margin-top: 5px;
         }
+
+        .nav-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff; 
+        }
         
         .hero {
             max-width: 1400px;
@@ -270,10 +292,6 @@
             50% { transform: translateY(-20px); }
         }
         
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-        
         @media (max-width: 768px) {
             .hero h2 {
                 font-size: 2.5rem;
@@ -302,13 +320,16 @@
         <div class="header-content">
             <h1>🛡️ AML Detection System</h1>
             <p>Advanced Graph Neural Networks for Financial Crime Prevention</p>
+            <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="eda.html">EDA</a>
+            <a href="dashboard.html">Dashboard</a>        
         </div>
     </div>
 
     <div class="hero">
-        <div class="floating">
-            <h2>Detecting Financial Crime with AI</h2>
-        </div>
+        <h2>Detecting Financial Crime with AI</h2>
         <p>
             A cutting-edge machine learning system that leverages Graph Neural Networks and real-time streaming 
             to identify money laundering patterns in financial transaction networks.
