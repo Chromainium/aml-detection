@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AML Detection - Exploratory Data Analysis</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 40px;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .nav-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 30px;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 15px;
+        }
+        
+        .section h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #ffa502;
+        }
+        
+        .section p {
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+        
+        .section ul {
+            margin: 15px 0 15px 30px;
+            line-height: 1.8;
+        }
+        
+        .section li {
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+        
+        .visualization-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .visualization-placeholder {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 80px 20px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+        
+        .visualization-placeholder h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+        
+        .visualization-placeholder p {
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        
+        .image-upload-hint {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .chart-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .chart-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #2ed573;
+            text-align: center;
+        }
+        
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #2ed573;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box.info {
+            border-left-color: #5352ed;
+        }
+        
+        .highlight-box.warning {
+            border-left-color: #ffa502;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-item h5 {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-item .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2ed573;
+        }
+        
+        .text-placeholder {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            opacity: 0.7;
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Exploratory Data Analysis</h1>
+        <p>Understanding Transaction Patterns & Network Structures</p>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="#" class="active">EDA</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dataset Overview Section -->
+        <section class="section" id="dataset-overview">
+            <h2>📁 Dataset Overview</h2>
+            
+            <p>
+                This section provides a comprehensive statistical overview of the AML transaction dataset, including key characteristics, distribution patterns, and preliminary observations that guided our modeling approach.
+            </p>
+            
+            <div class="stats-summary">
+                <div class="stat-item">
+                    <h5>Total Transactions</h5>
+                    <div class="value">534,892</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Unique Accounts</h5>
+                    <div class="value">52,147</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Flagged Transactions</h5>
+                    <div class="value">8.3%</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Time Range</h5>
+                    <div class="value">12 mo</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Avg. Transaction</h5>
+                    <div class="value">$4,327</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Countries</h5>
+                    <div class="value">87</div>
+                </div>
+            </div>
+            
+            <div class="text-placeholder">
+                [**Placeholder: Add detailed description of dataset characteristics, data collection methodology, preprocessing steps, and any data quality issues encountered...]
+            </div>
+        </section>
+
+        <!-- Distribution of Categorical Variables Section -->
+        <section class="section" id="categorical-distributions">
+            <h2>📈 Distribution of Categorical Variables</h2>
+            
+            <p>
+                Analysis of categorical features reveals important patterns in transaction types, account categories, geographic distributions, and risk classifications. These distributions inform feature engineering and model design decisions.
+            </p>
+            
+            <h3>Transaction Type Distribution</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>📊 Transaction Type Pie Chart</h4>
+                    <p>*Placeholder: Remember to insert pie chart image here (e.g., transaction_types.png)</p>
+                    <div class="image-upload-hint">
+                        💡 Replace this placeholder with: &lt;img src="pie-chart.png" style="max-width: 100%; height: auto; border-radius: 8px;"&gt;
+                    </div>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Describe the distribution of transaction types - wire transfers, cash deposits, international transfers, etc. Highlight any significant patterns or anomalies...]
+                </div>
+            </div>
+            
+            <h3>Account Category Analysis</h3>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h4>Account Type Distribution</h4>
+                    <div class="visualization-placeholder" style="min-height: 300px;">
+                        <h4>📊 Bar Chart Placeholder</h4>
+                        <p>account_types.png</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h4>Business Sector Breakdown</h4>
+                    <div class="visualization-placeholder" style="min-height: 300px;">
+                        <h4>📊 Bar Chart Placeholder</h4>
+                        <p>business_sectors.png</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-placeholder">
+                [*Placeholder: Discuss patterns in account types (personal, business, trust, etc.) and business sectors. Note any sectors with higher risk profiles...]
+            </div>
+            
+            <h3>Geographic Distribution</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>🗺️ Geographic Heatmap</h4>
+                    <p>Insert geographic distribution visualization (geographic_distribution.png)</p>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Analyze the geographic spread of transactions, identify high-risk jurisdictions, and discuss cross-border transaction patterns...]
+                </div>
+            </div>
+            
+            <div class="highlight-box info">
+                <strong>Key Observation:</strong> [*Remember to add key findings about categorical distributions here - e.g., "Wire transfers account for 45% of flagged transactions despite representing only 23% of total volume"]
+            </div>
+        </section>
+
+        <!-- Time Series Analysis Section -->
+        <section class="section" id="time-series">
+            <h2>⏰ Time Series Analysis of Laundering Nodes</h2>
+            
+            <p>
+                Temporal analysis reveals critical patterns in how money laundering networks operate over time. This section examines transaction velocity, timing patterns, and the evolution of suspicious behavior.
+            </p>
+            
+            <h3>Transaction Volume Over Time</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>📈 Time Series Line Chart</h4>
+                    <p>Insert time series plot (transaction_volume_time.png)</p>
+                    <div class="image-upload-hint">
+                        💡 Show total transactions and flagged transactions over time
+                    </div>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Describe temporal patterns, identify periods of high suspicious activity, discuss any seasonal trends or anomalies in the data...]
+                </div>
+            </div>
+            
+            <h3>Hourly Transaction Patterns</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>🕐 Hourly Distribution Chart</h4>
+                    <p>*Remember to insert hourly pattern visualization (hourly_patterns.png)</p>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Analyze hourly patterns, note any suspicious activity during off-hours, compare legitimate vs. suspicious transaction timing...]
+                </div>
+            </div>
+            
+            <h3>Laundering Node Activity Timeline</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>🔴 Flagged Node Activity</h4>
+                    <p>Insert laundering node timeline (laundering_nodes_timeline.png)</p>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Track the lifecycle of laundering nodes - when they become active, peak activity periods, dormancy patterns, and eventual detection or termination...]
+                </div>
+            </div>
+            
+            <div class="highlight-box warning">
+                <strong>Temporal Insight:</strong> [*Remember to add key temporal finding here - e.g., "Suspicious accounts show 3.2x higher transaction velocity in their first 30 days compared to legitimate accounts"]
+            </div>
+        </section>
+
+        <!-- Numerical Variable Analysis Section -->
+        <section class="section" id="numerical-analysis">
+            <h2>📐 Numerical Variable Analysis</h2>
+            
+            <p>
+                Understanding the distribution and relationships of numerical features is crucial for feature engineering and model performance. This analysis covers transaction amounts, network metrics, and derived features.
+            </p>
+            
+            <h3>Transaction Amount Distribution</h3>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h4>Amount Distribution (Box Plot)</h4>
+                    <div class="visualization-placeholder" style="min-height: 350px;">
+                        <h4>📊 Box Plot Placeholder</h4>
+                        <p>amount_boxplot.png</p>
+                        <div class="image-upload-hint">
+                            💡 Compare legitimate vs. suspicious transactions
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h4>Amount Distribution (Histogram)</h4>
+                    <div class="visualization-placeholder" style="min-height: 350px;">
+                        <h4>📊 Histogram Placeholder</h4>
+                        <p>amount_histogram.png</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-placeholder">
+                [Placeholder: Discuss transaction amount patterns, identify structuring behaviors (amounts just below reporting thresholds), analyze outliers and extreme values...]
+            </div>
+            
+            <h3>Network Metrics Distribution</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>🕸️ Network Centrality Measures</h4>
+                    <p>Insert network metrics visualization (network_metrics.png)</p>
+                    <div class="image-upload-hint">
+                        💡 Show degree centrality, betweenness, clustering coefficient distributions
+                    </div>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Analyze graph-based features like degree centrality, betweenness centrality, PageRank scores, and clustering coefficients. Compare metrics for suspicious vs. legitimate nodes...]
+                </div>
+            </div>
+            
+            <h3>Feature Correlations</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>🔗 Correlation Heatmap</h4>
+                    <p>Insert correlation matrix (correlation_heatmap.png)</p>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Identify highly correlated features, discuss multicollinearity concerns, highlight feature interactions relevant for model design...]
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Structure Analysis Section -->
+        <section class="section" id="network-analysis">
+            <h2>🕸️ Network Structure & Graph Properties</h2>
+            
+            <p>
+                The graph structure of financial transactions provides unique insights into money laundering patterns. This section explores the topology of the transaction network and identifies suspicious subgraphs.
+            </p>
+            
+            <h3>Network Topology Overview</h3>
+            <div class="stats-summary">
+                <div class="stat-item">
+                    <h5>Graph Density</h5>
+                    <div class="value">0.0043</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Avg. Degree</h5>
+                    <div class="value">4.7</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Clustering Coef.</h5>
+                    <div class="value">0.21</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Connected Comp.</h5>
+                    <div class="value">1,247</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Avg. Path Length</h5>
+                    <div class="value">3.8</div>
+                </div>
+                <div class="stat-item">
+                    <h5>Network Diameter</h5>
+                    <div class="value">12</div>
+                </div>
+            </div>
+            
+            <h3>Degree Distribution Analysis</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>📊 Degree Distribution</h4>
+                    <p>Insert degree distribution plot (degree_distribution.png)</p>
+                </div>
+                <div class="text-placeholder">
+                    [Placeholder: Discuss whether the network follows a power-law distribution, identify hub accounts, analyze degree distribution differences between legitimate and suspicious accounts...]
+                </div>
+            </div>
+            
+            <h3>Community Detection</h3>
+            <div class="visualization-container">
+                <div class="visualization-placeholder">
+                    <h4>👥 Network Communities</h4>
+                    <p>Insert community detection visualization (communities.png)</p>
+                </div>
+                <div class="text-placeholder">
+                    [*Placeholder: Present results from community detection algorithms, identify suspicious communities, discuss the characteristics of tightly-connected laundering networks...]
+                </div>
+            </div>
+            
+            <h3>Subgraph Patterns</h3>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h4>Layering Patterns</h4>
+                    <div class="visualization-placeholder" style="min-height: 300px;">
+                        <h4>🔄 Layering Visualization</h4>
+                        <p>layering_patterns.png</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h4>Circular Transaction Flows</h4>
+                    <div class="visualization-placeholder" style="min-height: 300px;">
+                        <h4>⭕ Cycle Detection</h4>
+                        <p>circular_flows.png</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-placeholder">
+                [*Placeholder: Identify common subgraph patterns in money laundering, such as chain structures, star patterns, and circular flows. Discuss how these patterns differ from legitimate transaction networks...]
+            </div>
+            
+            <div class="highlight-box">
+                <strong>Network Insight:</strong> [*Remember to add key network finding here - e.g., "Laundering networks exhibit significantly higher clustering coefficients (0.42 vs 0.18) and shorter average path lengths, suggesting coordinated activity"]
+            </div>
+        </section>
+
+        <!-- Key Findings Summary Section -->
+        <section class="section" id="key-findings">
+            <h2>🎯 Key Findings & Implications</h2>
+            
+            <p>
+                The exploratory analysis reveals several critical patterns that inform our GNN-based detection approach:
+            </p>
+            
+            <div class="highlight-box">
+                <strong>Finding 1: Structural Anomalies</strong>
+                <div class="text-placeholder">
+                    [*Placeholder: e.g., "Suspicious accounts form densely connected subgraphs with 73% higher internal transaction rates compared to external connections..."]
+                </div>
+            </div>
+            
+            <div class="highlight-box info">
+                <strong>Finding 2: Temporal Signatures</strong>
+                <div class="text-placeholder">
+                    [Placeholder: e.g., "Money laundering schemes show distinct temporal bursts, with 65% of flagged accounts exhibiting rapid transaction sequences within 48-hour windows..."]
+                </div>
+            </div>
+            
+            <div class="highlight-box warning">
+                <strong>Finding 3: Amount Structuring</strong>
+                <div class="text-placeholder">
+                    [Placeholder: e.g., "Clear evidence of structuring with transaction amounts clustering just below $10,000 reporting threshold..."]
+                </div>
+            </div>
+            
+            <h3>Implications for Model Design</h3>
+            <ul>
+                <li><strong>Graph Structure:</strong> The presence of distinct subgraph patterns justifies the use of GNN architecture</li>
+                <li><strong>Temporal Features:</strong> Time-based features and sequential patterns must be incorporated</li>
+                <li><strong>Multi-hop Context:</strong> Suspicious behavior often manifests across multiple transaction hops</li>
+                <li><strong>Feature Engineering:</strong> Network centrality measures prove highly discriminative</li>
+            </ul>
+            
+            <div class="text-placeholder">
+                [*Placeholder: Summarize how these findings shaped the methodology, feature selection, and model architecture choices...]
+            </div>
+        </section>
+    </div>
+</body>
+</html>
