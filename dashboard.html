@@ -30,6 +30,9 @@
             padding: 20px 40px;
             backdrop-filter: blur(10px);
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100; 
         }
         
         .header h1 {
@@ -42,6 +45,28 @@
             margin-top: 5px;
         }
         
+        .nav-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
         .container {
             max-width: 1800px;
             margin: 0 auto;
@@ -293,6 +318,12 @@
             <div>
                 <h1>🛡️ AML Real-Time Detection System</h1>
                 <p>Network Analysis • PySpark Streaming • Machine Learning</p>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="about.html">Overview</a>
+                    <a href="#" class="active">Exploratory Data Analysis</a>
+                    <a href="dashboard.html">Dashboard</a>
+                </div>
             </div>
             <div class="live-indicator">
                 <div class="live-dot"></div>
