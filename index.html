@@ -66,7 +66,7 @@
         .hero {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 80px 30px;
+            padding: 80px 30px 60px;
             text-align: center;
         }
         
@@ -81,14 +81,50 @@
             background-clip: text;
         }
         
-        .hero p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
+        .intro-section {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
         }
         
+        .intro-block {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+        
+        .intro-block h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #ffa502;
+        }
+        
+        .intro-block p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+        
+        .tech-stack-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .tech-badge-small {
+            background: rgba(46, 213, 115, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(46, 213, 115, 0.4);
+        }
+        
+        /* COMMENTED OUT - Uncomment when GNN metrics are available
         .hero-stats {
             display: flex;
             justify-content: center;
@@ -115,6 +151,7 @@
             letter-spacing: 1px;
             margin-top: 5px;
         }
+        */
         
         .container {
             max-width: 1400px;
@@ -173,6 +210,41 @@
             opacity: 1;
         }
         
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .card-features {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .card-features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            opacity: 0.9;
+        }
+        
         .card-features li::before {
             content: '✓';
             position: absolute;
@@ -220,6 +292,7 @@
             box-shadow: 0 8px 30px rgba(46, 213, 115, 0.5);
         }
         
+        /* COMMENTED OUT - Features not yet implemented
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -250,29 +323,7 @@
             opacity: 0.85;
             line-height: 1.6;
         }
-        
-        .tech-badge-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 40px;
-        }
-        
-        .tech-badge {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .tech-badge:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-        }
+        */
         
         footer {
             background: rgba(0, 0, 0, 0.3);
@@ -297,16 +348,12 @@
                 font-size: 2.5rem;
             }
             
-            .hero p {
-                font-size: 1.1rem;
+            .intro-block p {
+                font-size: 1rem;
             }
             
             .cards-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .hero-stats {
-                gap: 30px;
             }
             
             .section-title {
@@ -319,7 +366,7 @@
     <div class="header">
         <div class="header-content">
             <h1>🛡️ AML Detection System</h1>
-            <p>Advanced Graph Neural Networks for Financial Crime Prevention</p>
+            <p>Real-Time Financial Transaction Monitoring with Network Analysis</p>
             <div class="nav-links">
                 <a href="#" class="active">Home</a>
                 <a href="about.html">Overview</a>
@@ -330,12 +377,57 @@
     </div>
 
     <div class="hero">
-        <h2>Detecting Financial Crime with AI</h2>
-        <p>
-            A cutting-edge machine learning system that leverages Graph Neural Networks and real-time streaming 
-            to identify money laundering patterns in financial transaction networks.
-        </p>
+        <h2>Anti-Money Laundering Detection System</h2>
         
+        <div class="intro-section">
+            <div class="intro-block">
+                <p>
+                    This project applies network analysis and distributed computing to financial transaction 
+                    monitoring—combining graph-based fraud detection with real-time streaming data processing.
+                </p>
+            </div>
+            
+            <div class="intro-block">
+                <h3>Current Implementation</h3>
+                <p>
+                    I've built a baseline rule-based detection system that serves two purposes: providing 
+                    immediate functionality for the dashboard and establishing performance benchmarks for 
+                    the graph neural network (GNN) currently in development. The dashboard displays real-time 
+                    results from this system as transactions are processed.
+                </p>
+            </div>
+            
+            <div class="intro-block">
+                <h3>Architecture</h3>
+                <p>
+                    Transaction streams flow through Azure Event Hubs into Databricks, where each transaction 
+                    is evaluated against the existing transaction graph stored in Azure Blob Storage. Detection 
+                    results are written to Azure Cosmos DB, and the dashboard updates via Azure Functions API 
+                    calls that query the most recent processed transactions.
+                </p>
+                <div class="tech-stack-inline">
+                    <span class="tech-badge-small">Azure Event Hubs</span>
+                    <span class="tech-badge-small">Azure Blob Storage</span>
+                    <span class="tech-badge-small">Azure Cosmos DB</span>
+                    <span class="tech-badge-small">Azure Functions</span>
+                    <span class="tech-badge-small">Databricks</span>
+                    <span class="tech-badge-small">PySpark</span>
+                    <span class="tech-badge-small">Python</span>
+                    <span class="tech-badge-small">GitHub Pages</span>
+                </div>
+            </div>
+            
+            <div class="intro-block">
+                <h3>Note on Detection Rates</h3>
+                <p>
+                    Due to the naturally low frequency of money laundering patterns and the conservative 
+                    nature of the rule-based approach, periods showing zero detections are expected during 
+                    normal operation. This will improve as the GNN model is integrated.
+                </p>
+            </div>
+        </div>
+        
+        <!-- COMMENTED OUT - Uncomment when GNN metrics are available
         <div class="hero-stats">
             <div class="hero-stat">
                 <span class="number">94.7%</span>
@@ -354,6 +446,7 @@
                 <span class="label">False Positive</span>
             </div>
         </div>
+        -->
     </div>
 
     <div class="container">
@@ -366,14 +459,14 @@
                     <span class="card-icon">📋</span>
                     <h3>Project Overview</h3>
                     <p>
-                        Placeholder: Comprehensive documentation covering the problem statement, motivation, methodology, 
-                        and key findings of the AML detection system.
+                        Comprehensive documentation covering the problem statement, motivation, methodology, 
+                        and implementation details of the AML detection system.
                     </p>
                     <ul class="card-features">
                         <li>Problem Statement & Motivation</li>
                         <li>Dataset Description & Sources</li>
-                        <li>GNN Architecture Details</li>
-                        <li>Performance Results & Insights</li>
+                        <li>Architecture & Implementation</li>
+                        <li>Current Progress & Roadmap</li>
                     </ul>
                 </div>
             </a>
@@ -384,14 +477,14 @@
                     <span class="card-icon">📊</span>
                     <h3>Exploratory Data Analysis</h3>
                     <p>
-                        Placeholder: In-depth analysis of transaction patterns, network structures, and statistical 
-                        distributions that informed our modeling approach.
+                        In-depth analysis of transaction patterns, network structures, and statistical 
+                        distributions that informed the modeling approach.
                     </p>
                     <ul class="card-features">
-                        <li>Categorical Variable Distributions</li>
-                        <li>Time Series Analysis</li>
+                        <li>Transaction Pattern Analysis</li>
+                        <li>Time Series Trends</li>
                         <li>Network Structure Insights</li>
-                        <li>Feature Correlations</li>
+                        <li>Feature Distributions</li>
                     </ul>
                 </div>
             </a>
@@ -402,20 +495,20 @@
                     <span class="card-icon">🖥️</span>
                     <h3>Live Dashboard</h3>
                     <p>
-                        Placeholder: Real-time monitoring interface showing transaction streams, risk classifications, 
-                        and network visualizations as the system detects suspicious activity.
+                        Real-time monitoring interface showing processed transactions, detection results, 
+                        and system metrics from the rule-based detection system.
                     </p>
                     <ul class="card-features">
                         <li>Real-Time Transaction Feed</li>
-                        <li>Network Graph Visualization</li>
-                        <li>Risk Metrics & Statistics</li>
-                        <li>Alert System</li>
+                        <li>Detection Results & Alerts</li>
+                        <li>System Metrics & Statistics</li>
+                        <li>Processing Status</li>
                     </ul>
                 </div>
             </a>
         </div>
 
-        <!-- Key Features Section -->
+        <!-- COMMENTED OUT - Features not yet implemented
         <h2 class="section-title" style="margin-top: 80px;">Key Features & Capabilities</h2>
         
         <div class="features-grid">
@@ -467,34 +560,21 @@
                 </p>
             </div>
         </div>
-
-        <!-- Technology Stack -->
-        <h2 class="section-title" style="margin-top: 60px;">Technology Stack</h2>
-        <div class="tech-badge-container">
-            <span class="tech-badge">Python</span>
-            <span class="tech-badge">PySpark</span>
-            <span class="tech-badge">TensorFlow</span>
-            <span class="tech-badge">GraphFrames</span>
-            <span class="tech-badge">Apache Kafka</span>
-            <span class="tech-badge">D3.js</span>
-            <span class="tech-badge">Chart.js</span>
-            <span class="tech-badge">Docker</span>
-            <span class="tech-badge">PostgreSQL</span>
-        </div>
+        -->
 
         <!-- CTA Section -->
         <div class="cta-section">
-            <h2>See the System in Action</h2>
+            <h2>View the Dashboard</h2>
             <p>
-                Experience real-time AML detection with our interactive dashboard. Watch as the system 
-                analyzes transaction streams and identifies suspicious patterns in real-time.
+                Monitor the real-time transaction processing pipeline and view detection results from 
+                the rule-based system as transactions flow through the architecture.
             </p>
-            <a href="dashboard.html" class="cta-button">🚀 Launch Dashboard</a>
+            <a href="dashboard.html" class="cta-button">🚀 View Dashboard</a>
         </div>
     </div>
 
     <footer>
-        <p>© 2025 AML Detection System | Graph Neural Networks for Financial Crime Prevention</p>
+        <p>© 2025 AML Detection System | Network Analysis for Financial Crime Prevention</p>
     </footer>
 </body>
 </html>
