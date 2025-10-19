@@ -440,12 +440,12 @@
             const div = document.createElement('div');
 
             //const riskClass = tx.risk_level ? tx.risk_level.toLowerCase() : 'low';
-            div.className = `transaction-item ${riskClass}-risk`;
 
             // Determine risk based on is_laundering flag
             const isHighRisk = tx.is_laundering === 1 || tx.is_laundering_predicted === 1;
             const riskLevel = isHighRisk ? 'HIGH' : 'LOW';
             const riskClass = riskLevel.toLowerCase();
+            div.className = `transaction-item ${riskClass}-risk`;
             
             // Generate explanation based on model features
             const explanation = generateExplanation(tx);
