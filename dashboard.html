@@ -337,18 +337,18 @@
             </div>
             
             <div class="stat-card">
-                <h3>Avg Processing Time</h3>
-                <div class="stat-value" id="processing-time">-</div>
+                <h3>Avg Query Time</h3>
+                <div class="stat-value" id="query-time">-</div>
                 <div class="stat-change">Milliseconds per transaction</div>
             </div>
         </div>
 
         <!-- Main Content Grid -->
         <div class="main-grid">
-            <!-- Recent Transactions -->
+            <!-- Flagged Transactions -->
             <div class="panel">
                 <h2>
-                    📊 Recent Transactions
+                    📊 Flagged Transactions
                     <button class="refresh-btn" onclick="loadTransactions()" style="margin-left: auto;">
                         Refresh
                     </button>
@@ -405,6 +405,8 @@
                     data.high_risk_transactions.toLocaleString();
                 document.getElementById('detection-rate').textContent = 
                     `${data.detection_rate.toFixed(2)}% detection rate`;
+                document.getElementById('query-time').textContent = 
+                    `${data.avg_query_time.toFixed(2)}ms`;
                 document.getElementById('last-update').textContent = 
                     new Date().toLocaleTimeString();
                     
