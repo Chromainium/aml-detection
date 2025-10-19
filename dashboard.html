@@ -418,7 +418,7 @@
         // Load recent transactions
         async function loadTransactions() {
             try {
-                const transactions = await callFunction('get_recent_transactions', { limit: 20 });
+                const transactions = await callFunction('get_recent_transactions', { limit: 35 });
                 
                 const listElement = document.getElementById('transaction-list');
                 listElement.innerHTML = '';
@@ -438,8 +438,14 @@
         // Create transaction item HTML
         function createTransactionItem(tx) {
             const div = document.createElement('div');
-            const riskClass = tx.risk_level ? tx.risk_level.toLowerCase() : 'low';
-            div.className = `transaction-item ${riskClass}-risk`;
+
+            //const riskClass = tx.risk_level ? tx.risk_level.toLowerCase() : 'low';
+            //div.className = `transaction-item ${riskClass}-risk`;
+
+            // Determine risk based on is_laundering flag
+            const isHighRisk = tx.is_laundering === 1 || tx.is_laundering_predicted === 1;
+            const riskLevel = isHighRisk ? 'HIGH' : 'LOW';
+            const riskClass = riskLevel.toLowerCase();
             
             // Generate explanation based on model features
             const explanation = generateExplanation(tx);
@@ -447,7 +453,7 @@
             div.innerHTML = `
                 <div class="transaction-header">
                     <span class="transaction-id">${tx.transaction_id}</span>
-                    <span class="risk-badge ${riskClass}">${tx.risk_level || 'LOW'}</span>
+                    <span class="risk-badge ${riskClass}">${riskLevel}</span>
                 </div>
                 <div class="transaction-details">
                     <strong>Amount:</strong> $${(tx.amount || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}
