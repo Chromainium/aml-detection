@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AML Real-Time Detection System</title>
-    
-    <!-- D3.js for network visualization -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>AML Real-Time Dashboard</title>
     
     <!-- Chart.js for statistics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -137,16 +134,8 @@
             gap: 10px;
         }
         
-        #network-graph {
-            width: 100%;
-            height: 500px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            position: relative;
-        }
-        
         .transaction-list {
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
         }
         
@@ -316,8 +305,8 @@
     <div class="header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h1>🛡️ AML Real-Time Detection System</h1>
-                <p>Network Analysis • PySpark Streaming • Machine Learning</p>
+                <h1>🛡️ AML Real-Time Dashboard</h1>
+                <p>Network Analysis • PySpark Streaming • Rule-Based Detection</p>
                 <div class="nav-links">
                     <a href="index.html">Home</a>
                     <a href="about.html">Overview</a>
@@ -347,15 +336,6 @@
                 <div class="stat-change" id="detection-rate">-</div>
             </div>
             
-            <!--
-            COMMENTED OUT UNTIL NETWORK HAS BEEN ENABLED
-            <div class="stat-card">
-                <h3>Network Nodes</h3>
-                <div class="stat-value" id="node-count">-</div>
-                <div class="stat-change">Unique accounts</div>
-            </div>
-            -->
-            
             <div class="stat-card">
                 <h3>Avg Processing Time</h3>
                 <div class="stat-value" id="processing-time">-</div>
@@ -365,27 +345,6 @@
 
         <!-- Main Content Grid -->
         <div class="main-grid">
-            <!-- Network Visualization - DISABLED FOR NOW -->
-            <!--
-            <div class="panel">
-                <h2>
-                    🕸️ Transaction Network Graph
-                    <button class="refresh-btn" onclick="loadNetworkData()" style="margin-left: auto;">
-                        Refresh
-                    </button>
-                </h2>
-                <div id="network-graph"></div>
-            </div>
-            -->
-            <!-- Placeholder for future network graph -->
-            <div class="panel">
-                <h2>🕸️ Transaction Network Graph</h2>
-                <div style="padding: 100px; text-align: center; opacity: 0.5;">
-                    <p style="font-size: 1.2rem; margin-bottom: 20px;">📊 Network visualization coming soon</p>
-                    <p style="font-size: 0.9rem;">This will display interactive transaction network graphs<br>showing relationships between accounts</p>
-                </div>
-            </div>
-
             <!-- Recent Transactions -->
             <div class="panel">
                 <h2>
@@ -425,14 +384,10 @@
             return response.json();
         }
         
-        // Global data
-        let networkData = null;
-        
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             loadStatistics();
             loadTransactions();
-            //loadNetworkData(); //Disabled until network features are added
             
             // Auto-refresh every 10 seconds
             setInterval(loadStatistics, 10000);
@@ -539,159 +494,7 @@
             return explanations.length > 0 ? explanations.join('. ') : 
                 "Model flagged based on transaction amount and account behavior patterns.";
         }
-        
-        // COMMENTED OUT - Network graph features for future use
-        /*
-        // Generate explanation (explainability)
-        function generateExplanation(tx) {
-            const explanations = [];
-            
-            // Check for cycle involvement
-            if (tx.from_is_in_cycle === 1 || tx.to_is_in_cycle === 1) {
-                explanations.push("Account involved in circular transaction pattern (layering)");
-            }
-            
-            // Check for high centrality (hub account)
-            if ((tx.from_pagerank || 0) > 0.01) {
-                explanations.push("Source account is a major hub in transaction network");
-            }
-            
-            if ((tx.to_pagerank || 0) > 0.01) {
-                explanations.push("Destination account is a major hub in transaction network");
-            }
-            
-            // Amount-based
-            if (tx.amount > 9000 && tx.amount < 10000) {
-                explanations.push("Transaction amount just below reporting threshold (structuring)");
-            }
-            
-            if (tx.amount >= 10000) {
-                explanations.push("Large transaction requiring enhanced scrutiny");
-            }
-            
-            return explanations.length > 0 ? explanations.join('. ') : null;
-        }
-        */
-         
-        // COMMENTED OUT - Network graph functions for future use
-        /*
-        // Load and visualize network
-        async function loadNetworkData() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/get_network_data`);
-                networkData = await response.json();
-                
-                document.getElementById('node-count').textContent = 
-                    networkData.nodes.length.toLocaleString();
-                
-                visualizeNetwork(networkData);
-                
-            } catch (error) {
-                console.error('Error loading network data:', error);
-            }
-        }
-        
-        // D3.js network visualization
-        function visualizeNetwork(data) {
-            const container = document.getElementById('network-graph');
-            container.innerHTML = '';
-            
-            const width = container.offsetWidth;
-            const height = 500;
-            
-            const svg = d3.select('#network-graph')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-            
-            // Create force simulation
-            const simulation = d3.forceSimulation(data.nodes)
-                .force('link', d3.forceLink(data.edges).id(d => d.id).distance(100))
-                .force('charge', d3.forceManyBody().strength(-200))
-                .force('center', d3.forceCenter(width / 2, height / 2));
-            
-            // Draw edges
-            const link = svg.append('g')
-                .selectAll('line')
-                .data(data.edges)
-                .enter()
-                .append('line')
-                .attr('stroke', d => {
-                    if (d.risk_level === 'HIGH') return '#ff4757';
-                    if (d.risk_level === 'MEDIUM') return '#ffa502';
-                    return '#70a1ff';
-                })
-                .attr('stroke-width', d => Math.log(d.amount + 1) / 2)
-                .attr('stroke-opacity', 0.6);
-            
-            // Draw nodes
-            const node = svg.append('g')
-                .selectAll('circle')
-                .data(data.nodes)
-                .enter()
-                .append('circle')
-                .attr('r', 8)
-                .attr('fill', d => {
-                    const hasHighRisk = data.edges.some(e => 
-                        (e.source.id === d.id || e.target.id === d.id) && e.risk_level === 'HIGH'
-                    );
-                    return hasHighRisk ? '#ff4757' : '#70a1ff';
-                })
-                .attr('stroke', '#fff')
-                .attr('stroke-width', 2)
-                .call(d3.drag()
-                    .on('start', dragStarted)
-                    .on('drag', dragged)
-                    .on('end', dragEnded));
-            
-            // Add labels
-            const label = svg.append('g')
-                .selectAll('text')
-                .data(data.nodes)
-                .enter()
-                .append('text')
-                .text(d => d.id)
-                .attr('font-size', 10)
-                .attr('fill', '#fff')
-                .attr('dx', 12)
-                .attr('dy', 4);
-            
-            // Update positions on simulation tick
-            simulation.on('tick', () => {
-                link
-                    .attr('x1', d => d.source.x)
-                    .attr('y1', d => d.source.y)
-                    .attr('x2', d => d.target.x)
-                    .attr('y2', d => d.target.y);
-                
-                node
-                    .attr('cx', d => d.x)
-                    .attr('cy', d => d.y);
-                
-                label
-                    .attr('x', d => d.x)
-                    .attr('y', d => d.y);
-            });
-            
-            // Drag functions
-            function dragStarted(event, d) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-            
-            function dragged(event, d) {
-                d.fx = event.x;
-                d.fy = event.y;
-            }
-            
-            function dragEnded(event, d) {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-            }
-        }
-        */
+
     </script>
 </body>
 </html>
