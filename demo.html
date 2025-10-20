@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AML Detection - Video Demo</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 40px;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .nav-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 30px;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 15px;
+        }
+        
+        .section p {
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+        
+        .video-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            aspect-ratio: 16 / 9;
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        .timestamps-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .timestamps-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #ffa502;
+        }
+        
+        .timestamp-list {
+            list-style: none;
+            display: grid;
+            gap: 15px;
+        }
+        
+        .timestamp-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2ed573;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timestamp-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .timestamp-label {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        
+        .timestamp-time {
+            background: rgba(46, 213, 115, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #2ed573;
+            font-size: 0.9rem;
+        }
+        
+        .cta-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .cta-section h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #2ed573 0%, #26a65b 100%);
+            color: #fff;
+            padding: 15px 35px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(46, 213, 115, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(46, 213, 115, 0.5);
+        }
+        
+        .note-box {
+            background: rgba(255, 165, 2, 0.1);
+            border-left: 4px solid #ffa502;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .note-box strong {
+            color: #ffa502;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .timestamp-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 Live Dashboard Demo</h1>
+        <p>Real-Time AML Detection System in Action</p>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="eda.html">EDA</a>
+            <a href="#" class="active">Demo</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Introduction Section -->
+        <section class="section" id="introduction">
+            <h2>System Demo</h2>
+            
+            <p>
+                Watch the AML detection system in action as it processes real-time transaction streams, identifies suspicious patterns, 
+                and displays risk assessments through the dashboard. This video demonstrates the full architecture of the system 
+                and goes into future plans for the project.
+            </p>
+            
+            <div class="note-box">
+                <strong>Note:</strong> The live dashboard uses external APIs that may be deactivated due to operational costs. 
+                This video demonstrates the system's functionality and user interface.
+            </div>
+        </section>
+
+        <!-- Video Section -->
+        <section class="section" id="video">
+            <div class="video-container">
+                <div style="padding:56.25% 0 0 0; position:relative;">
+                    <iframe
+                        src="https://player.vimeo.com/video/badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0"
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        style="position:absolute; top:0; left:0; width:100%; height:100%;"
+                        title="AML-Demo">
+                    </iframe>
+                </div>
+                <script src="https://player.vimeo.com/api/player.js"></script>
+            </div>
+            
+            <!-- Timestamps Section -->
+            <div class="timestamps-section">
+                <h3>⏱️ Video Timestamps</h3>
+                
+                <ul class="timestamp-list">
+                    <li class="timestamp-item">
+                        <span class="timestamp-label">Introduction</span>
+                        <span class="timestamp-time">0:00</span>
+                    </li>
+                    <li class="timestamp-item">
+                        <span class="timestamp-label">Architecture Overview</span>
+                        <span class="timestamp-time">0:18</span>
+                    </li>
+                    <li class="timestamp-item">
+                        <span class="timestamp-label">Dashboard</span>
+                        <span class="timestamp-time">2:10</span>
+                    </li>
+                    <li class="timestamp-item">
+                        <span class="timestamp-label">Current Implementation & Future Work</span>
+                        <span class="timestamp-time">4:36</span>
+                    </li>
+                    <li class="timestamp-item">
+                        <span class="timestamp-label">Closing</span>
+                        <span class="timestamp-time">6:22</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h3>Explore the Full Project</h3>
+            <p>
+                Interested in learning more? Check out the project on GitHub including the source code, 
+                documentation, and implementation details.
+            </p>
+            <a href="https://github.com/Chromainium/aml-detection" class="cta-button">🔗 View on GitHub</a>
+        </section>
+    </div>
+</body>
+</html>
