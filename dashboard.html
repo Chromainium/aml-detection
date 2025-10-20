@@ -69,6 +69,27 @@
             margin: 0 auto;
             padding: 30px;
         }
+
+        .info-banner {
+            background: rgba(255, 165, 2, 0.15);
+            border: 1px solid rgba(255, 165, 2, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .info-banner-icon {
+            font-size: 1.5rem;
+        }
+        
+        .info-banner-text {
+            flex: 1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
         
         .stats-grid {
             display: grid;
@@ -323,6 +344,18 @@
     </div>
 
     <div class="container">
+        <!-- Info Banner -->
+        <div class="info-banner">
+            <span class="info-banner-icon">ℹ️</span>
+            <div class="info-banner-text">
+                <strong>Dashboard is currently offline:</strong> To manage operating costs and server resources, 
+                the live version of this dashboard has been temporarily deactivated.
+                I've recorded a full, representative demo of its features and functionality for your convenience.
+                 
+                <a href="demo.html">[Go to the Video Demo]</a>
+            </div>
+        </div>
+
         <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card">
