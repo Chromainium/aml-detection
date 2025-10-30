@@ -1,32 +1,24 @@
-# aml-detection
+## Project Structure
 
-aml_detection/
+```
+money_laundering_detection/
 ├── config/
-│   ├── __init__.py
-│   ├── features.py          # FEATURE_CONFIGS dict with named feature sets
-│   └── models.py            # TrainingConfig, GNNConfig, MLPConfig, XGBoostConfig
+│   ├── features.py          # Feature set configurations
+│   └── models.py            # Model hyperparameters
 ├── data/
-│   ├── __init__.py
-│   ├── loader.py            # Load either pickled graphs or CSVs
-│   ├── preprocessor.py      # Temporal splits, bank filtering
-│   └── features.py          # FeatureEngineer class (graph → PyG conversion)
+│   ├── loader.py            # Data loading utilities
+│   ├── preprocessor.py      # Temporal splits and filtering
+│   └── features.py          # Feature engineering
 ├── models/
-│   ├── __init__.py
-│   ├── base.py              # BaseModel abstract class
-│   ├── gnn.py               # EdgeClassifierGNN
-│   ├── mlp.py               # EdgeFeatureClassifier (MLPEdgeClassifier)
-│   └── xgboost_wrapper.py   # XGBoostEdgeClassifier
+│   ├── base.py              # Abstract base class
+│   ├── gnn.py               # Graph Neural Network
+│   ├── mlp.py               # Multi-Layer Perceptrons
+│   └── xgboost_wrapper.py   # XGBoost wrapper
 ├── training/
-│   ├── __init__.py
-│   ├── trainer.py           # Trainer class
-│   └── evaluator.py         # Evaluator class (metrics, risk scoring)
+│   ├── trainer.py           # Training loops
+│   └── evaluator.py         # Evaluation and metrics
 ├── scenarios/
-│   ├── __init__.py
-│   ├── scenario1.py         # Perspective of single bank
-│   └── scenario2.py         # Perspective of single cluster
-├── examples/
-│   ├── compare_models.py    # Compare GNN vs MLP vs XGBoost
-│   └── feature_ablation.py  # Test different feature sets
-├── checkpoints/             # Stores best_model.pt
-├── main.py                  # Entry point
-└── README.md
+│   ├── scenario1.py         # BigBank perspective
+│   └── scenario2.py         # Cluster perspective (future)
+└── main.py                  # Entry point
+```
