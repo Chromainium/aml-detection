@@ -360,6 +360,12 @@
                 font-size: 2rem;
             }
         }
+
+        p {
+            margin-bottom: 20px;
+            margin-top: 0px;
+           }
+
     </style>
 </head>
 <body>
@@ -395,7 +401,7 @@
                     tree-based models, multi-layer perceptron, and rule-based models, perform on the problem of detecting
                     transactions which may form part of a money-laundering chain.
                 </p>
-                <p></p>
+                
                 <p>
                     A major challenge is the data itself. Real transaction datasets are largely unavailable due to regulations
                     surrounding customer privacy at financial institutions. Thus a sythetic dataset was used, which can only mimic real 
@@ -404,7 +410,7 @@
                     There is also the issue of AML transactions taking place across multiple financial institutions, but institutions 
                     only having access to their own data, making the path from origination to destination difficult to trace.
                 </p>
-                <p></p>
+                
                 <p>
                     Feature engineering from the structure of the transaction graph itself is one of the approaches I took to enrich the data.
                     Features such as betweenness centrality, transaction frequency, pagerank, reciprocity, could be calculated from the graph 
