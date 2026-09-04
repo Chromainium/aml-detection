@@ -368,6 +368,19 @@
         .model-table tr:hover {
             background-color: rgba(255,255, 255,0.12);
         }
+
+        .feature-code {
+            display: block;
+            margin-top: 6px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.78rem;
+            color: #8fbcd4;
+            overflow-wrap: anywhere;
+        }
+
+        .feature-table td:first-child {
+            min-width: 210px;
+        }
         
         footer {
             background: rgba(0, 0, 0, 0.3);
@@ -533,6 +546,90 @@
                                 </td>
                                 <td>
                                     F1 =
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Feature Engineering</h4>
+                <p class="subsection-intro">
+                    In addition to comparing model architectures, several behavioural features were engineered from the transaction history.
+                    These features were designed to represent transaction timig, account-level variablity, and how unsual an individual 
+                    transaction was relative to an account's typical activity.
+                </p>
+
+                <div class="table-container">
+                    <table class="model-table feature-table">
+
+                        <thread>
+                            <tr>
+                                <th>Engineered Feature</th>
+                                <th>How it was calculated</th>
+                                <th>Why it was calculated</th>
+                                <th>Behaviour Represented</th>
+                            </tr>
+                        </thread>
+
+                        <tbody>
+
+                            <tr>
+                                <td><strong>Time Since Previous Outgoing Transaction</strong></td>
+                                <span class="feature-code">time_since_prev_from_account</span>
+                                <td>
+                                    Transactions were grouped by the sending account and ordered by timestamp.
+                                    The different between each transaction and the sender's previous transaction 
+                                    was calculated in seconds.
+                                </td>
+                                <td>
+                                    To test whether the speed or frequency of outgoing tractions helped distinguish 
+                                    suspicious activity from account's normal transaction pattern
+                                </td>
+                                <td>
+                                    Rapid outgoing activity, transaction bursts, or funds moving out shortly after a previous transaction
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Time Since Previous Incoming Transaction</strong></td>
+                                <span class="feature-code">time_since_prev_to_account</span>
+                                <td>
+                                    []
+                                </td>
+                                <td>
+                                    []
+                                </td>
+                                <td>
+                                    []
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Intertransaction Interval Variability</strong></td>
+                                <span class="feature-code">coefficient_of_variation</span>
+                                <td>
+                                    []
+                                </td>
+                                <td>
+                                    []
+                                </td>
+                                <td>
+                                    []
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Per-Transaction Z-score</strong></td>
+                                <span class="feature-code">transaction_z_score</span>
+                                <td>
+                                    []
+                                </td>
+                                <td>
+                                    []
+                                </td>
+                                <td>
+                                    []
                                 </td>
                             </tr>
 
