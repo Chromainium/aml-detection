@@ -324,6 +324,50 @@
             line-height: 1.6;
         }
         */
+
+        h4 {
+            margin-top: 30px;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            color:#fff; 
+        }
+
+        .subsection-intro {
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .model-table th {
+            background-color: #2d4f6c;
+            color: white;
+            text-align: left;
+            padding: 12px;
+        }
+
+        .model-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        .model-table tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .model-table tr:hover {
+            background-color: rgba(255,255, 255,0.12);
+        }
         
         footer {
             background: rgba(0, 0, 0, 0.3);
@@ -418,6 +462,84 @@
                     large graphs and would need to be frequently re-calculated, either by approximation or other method to keep up with 
                     real-time changes.
                 </p>
+
+                <h4>Models Evaluated</h4>
+                <p class="subsection-intro">
+                    To evaluated different approaches for Anti-Money Laundering (AML) detection, multiple neural network architectures were tested.
+                    The objective was to understand the value added by graph relationships, temporal transaction patterns, and transaction-level 
+                    edge features when identifying suspicious activity.
+                </p>
+
+                <div class="table-container">
+                    <table class="model-table">
+
+                        <thread>
+                            <tr>
+                                <th>Model</th>
+                                <th>Rationale for Testing</th>
+                                <th>Key Question</th>
+                                <th>Result</th>
+                            </tr>
+                        </thread>
+
+                        <tbody>
+
+                            <tr>
+                                <td><strong>MLP</strong></td>
+                                <td>
+                                    Served as a traditional machine learning baseline using record-level features
+                                </td>
+                                <td>
+                                    How much predictive power exists without using transaction relationships?
+                                </td>
+                                <td>
+                                    F1 =
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>GNN</strong></td>
+                                <td>
+                                    Introduced graph structure by modeling entities and transations as connected nodes and edges.
+                                </td>
+                                <td>
+                                    Does incorporating network relationships improve detection performance?
+                                </td>
+                                <td>
+                                    F1 =
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>TGN</strong></td>
+                                <td>
+                                    Extended the graph model by incorporating the order and timing of transactions.
+                                </td>
+                                <td>
+                                    Does temporal information provide additional insight beyond a static transaction graph?
+                                </td>
+                                <td>
+                                    F1 =
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Alternative Edge GNN</strong></td>
+                                <td>
+                                    Tested a different set of of edge features to evaluate the importance of transaction-level information.
+                                </td>
+                                <td>
+                                    How do different sets of edge features affect model performance?
+                                </td>
+                                <td>
+                                    F1 =
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
             
             <div class="intro-block">
